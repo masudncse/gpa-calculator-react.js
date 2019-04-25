@@ -54,23 +54,30 @@ class App extends Component {
         return grade;
     };
 
-    componentDidUpdate() {
-        //this.setState({gpa: this.getGpa()});
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.marks !== this.state.marks){
+            this.setState({
+                gpa: this.getGpa(),
+                grade: this.getGrade()
+            });
+        }
     }
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <Entry
-                        subjects={this.state.subjects}
-                        subjectRef={this.subject}
-                        markRef={this.mark}
-                        onClick={this.handleAdd}/>
-                    <View
-                        marks={this.state.marks}
-                        gpa={this.state.gpa}
-                        grade={this.state.grade}/>
+            <div className="App">
+                <div className="container">
+                    <div className="row">
+                        <Entry
+                            subjects={this.state.subjects}
+                            subjectRef={this.subject}
+                            markRef={this.mark}
+                            onClick={this.handleAdd}/>
+                        <View
+                            marks={this.state.marks}
+                            gpa={this.state.gpa}
+                            grade={this.state.grade}/>
+                    </div>
                 </div>
             </div>
         );
