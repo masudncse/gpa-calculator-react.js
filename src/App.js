@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import './App.css';
 import Entry from './components/GpaCalculator/Entry';
@@ -9,7 +9,7 @@ class App extends Component {
         super(props);
 
         this.state = {
-            subjects: ['bangla', 'mathematics', 'english'],
+            subjects: ['', 'bangla', 'mathematics', 'english'],
             marks: [],
             gpa: 0,
             grade: 'N/A'
@@ -20,13 +20,30 @@ class App extends Component {
     }
 
     handleAdd = e => {
+        if (_.isEmpty(this.subject.current.value) || _.isEmpty(this.mark.current.value)) {
+            return window.alert("Inputs are required!!");
+        }
+
+        let check = this.state.marks.filter(item => {
+            if (item.subject === this.subject.current.value) {
+                return item;
+            }
+        });
+        if (check.length > 0) {
+            return window.alert("Mark has been added.");
+        }
+
+
+
         let mark = {
             subject: this.subject.current.value,
             mark: parseFloat(this.mark.current.value)
         };
 
         let joined = this.state.marks.concat(mark);
-        this.setState({marks: joined});
+        this.setState({ marks: joined });
+        this.mark.current.value = "";
+        this.subject.current.value = "";
     };
 
     getGpa = e => {
@@ -46,8 +63,18 @@ class App extends Component {
         if (gpa > 0) {
             if (gpa >= 80) {
                 grade = 'A+';
+            } else if (gpa >= 70) {
+                grade = 'A';
+            } else if (gpa >= 60) {
+                grade = 'A-';
+            } else if (gpa >= 50) {
+                grade = 'B';
+            } else if (gpa >= 40) {
+                grade = 'C';
+            } else if (gpa >= 33) {
+                grade = 'D';
             } else {
-                grade = 'N/A';
+                grade = 'F';
             }
         }
 
@@ -55,7 +82,7 @@ class App extends Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevState.marks !== this.state.marks){
+        if (prevState.marks !== this.state.marks) {
             this.setState({
                 gpa: this.getGpa(),
                 grade: this.getGrade()
@@ -72,11 +99,11 @@ class App extends Component {
                             subjects={this.state.subjects}
                             subjectRef={this.subject}
                             markRef={this.mark}
-                            onClick={this.handleAdd}/>
+                            onClick={this.handleAdd} />
                         <View
                             marks={this.state.marks}
                             gpa={this.state.gpa}
-                            grade={this.state.grade}/>
+                            grade={this.state.grade} />
                     </div>
                 </div>
             </div>
